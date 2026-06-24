@@ -17,7 +17,22 @@ let loadData = () => {
                 return doc;
             })
             .then(doc => {
-                console.log(doc);                
+                const transactions = Array.from(doc.querySelectorAll('row')).slice(0, 20);
+                const tbody = document.getElementById('transacciones');
+
+                tbody.innerHTML = transactions.map(transaction => {
+                    const date = transaction.querySelector('Date')?.textContent ?? '';
+                    const coffeeName = transaction.querySelector('coffee_name')?.textContent ?? '';
+                    const money = Number(transaction.querySelector('money')?.textContent ?? 0);
+
+                    return `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${coffeeName}</td>
+                            <td class="money">${fmtUSD.format(money)}</td>
+                        </tr>
+                    `;
+                }).join('');
             })
 
     } catch (err) {
